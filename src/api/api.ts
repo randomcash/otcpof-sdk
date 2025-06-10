@@ -4,8 +4,6 @@ import { createLogger, sleep } from "../common";
 import { Cluster } from "../solana";
 
 import {
-  ApiClmmConfigInfo,
-  ApiCpmmConfigInfo,
   ApiV3Token,
   FetchPoolParams,
   PoolsApiReturn,
@@ -15,7 +13,6 @@ import {
   FormatFarmKeyOut,
   AvailabilityCheckAPI3,
   PoolFetchType,
-  ExtensionsItem,
   JupToken,
 } from "./type";
 import { API_URLS, API_URL_CONFIG } from "./url";
@@ -124,16 +121,6 @@ export class Api {
         return Promise.reject(error);
       },
     );
-  }
-
-  async getClmmConfigs(): Promise<ApiClmmConfigInfo[]> {
-    const res = await this.api.get(this.urlConfigs.CLMM_CONFIG || API_URLS.CLMM_CONFIG);
-    return res.data;
-  }
-
-  async getCpmmConfigs(): Promise<ApiCpmmConfigInfo[]> {
-    const res = await this.api.get(this.urlConfigs.CPMM_CONFIG || API_URLS.CPMM_CONFIG);
-    return res.data;
   }
 
   async getClmmPoolLines(poolId: string): Promise<{ price: string; liquidity: string }[]> {

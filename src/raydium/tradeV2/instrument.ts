@@ -42,9 +42,6 @@ export function route1Instruction(
 
   amountIn: BN,
   amountOut: BN,
-
-  tickArrayA?: PublicKey[],
-  // tickArrayB?: PublicKey[],
 ): TransactionInstruction {
   const dataLayout = struct([u8("instruction"), u64("amountIn"), u64("amountOut")]);
 
@@ -61,28 +58,7 @@ export function route1Instruction(
     { pubkey: ownerWallet, isSigner: true, isWritable: false },
   ];
 
-  if (poolInfoA.type === "Concentrated") {
-    const poolKey = jsonInfo2PoolKeys(poolKeyA as ClmmKeys);
-    keys.push(
-      ...[
-        { pubkey: poolKey.config.id, isSigner: false, isWritable: false },
-        { pubkey: poolKey.id, isSigner: false, isWritable: true },
-        {
-          pubkey: poolKey.mintA.address.equals(inputMint) ? poolKey.vault.A : poolKey.vault.B,
-          isSigner: false,
-          isWritable: true,
-        },
-        {
-          pubkey: poolKey.mintA.address.equals(inputMint) ? poolKey.vault.B : poolKey.vault.A,
-          isSigner: false,
-          isWritable: true,
-        },
-        // { pubkey: poolKey.observationId, isSigner: false, isWritable: true }, // to do
-        { pubkey: poolKey.id, isSigner: false, isWritable: true },
-        ...tickArrayA!.map((i) => ({ pubkey: i, isSigner: false, isWritable: true })),
-      ],
-    );
-  } else if (poolInfoA.pooltype.includes("StablePool")) {
+  if (poolInfoA.pooltype.includes("StablePool")) {
     const poolKey = jsonInfo2PoolKeys(poolKeyA as AmmV5Keys);
     keys.push(
       ...[
@@ -156,11 +132,6 @@ export function route2Instruction(
   userDestinationToken: PublicKey,
   userPdaAccount: PublicKey,
   ownerWallet: PublicKey,
-
-  routeMint: PublicKey,
-
-  // tickArrayA?: PublicKey[],
-  tickArrayB?: PublicKey[],
 ): TransactionInstruction {
   const dataLayout = struct([u8("instruction")]);
 
@@ -177,28 +148,7 @@ export function route2Instruction(
     { pubkey: ownerWallet, isSigner: true, isWritable: false },
   ];
 
-  if (poolInfoB.type === "Concentrated") {
-    const poolKey = jsonInfo2PoolKeys(poolKeyB as ClmmKeys);
-    keys.push(
-      ...[
-        { pubkey: poolKey.config.id, isSigner: false, isWritable: false },
-        { pubkey: poolKey.id, isSigner: false, isWritable: true },
-        {
-          pubkey: poolKey.mintA.address.equals(routeMint) ? poolKey.vault.A : poolKey.vault.B,
-          isSigner: false,
-          isWritable: true,
-        },
-        {
-          pubkey: poolKey.mintA.address.equals(routeMint) ? poolKey.vault.B : poolKey.vault.A,
-          isSigner: false,
-          isWritable: true,
-        },
-        // { pubkey: poolKey.observationId, isSigner: false, isWritable: true }, // to do
-        { pubkey: poolKey.id, isSigner: false, isWritable: true },
-        ...tickArrayB!.map((i) => ({ pubkey: i, isSigner: false, isWritable: true })),
-      ],
-    );
-  } else if (poolInfoB.pooltype.includes("StablePool")) {
+  if (poolInfoB.pooltype.includes("StablePool")) {
     const poolKey = jsonInfo2PoolKeys(poolKeyB as AmmV5Keys);
     keys.push(
       ...[

@@ -265,10 +265,7 @@ export type ApiV3PoolInfoStandardItemCpmm = ApiV3PoolInfoBaseItem & {
   config: ApiCpmmConfigV3;
 };
 
-export type ApiV3PoolInfoItem =
-  | ApiV3PoolInfoConcentratedItem
-  | ApiV3PoolInfoStandardItem
-  | ApiV3PoolInfoStandardItemCpmm;
+export type ApiV3PoolInfoItem = ApiV3PoolInfoStandardItem | ApiV3PoolInfoStandardItemCpmm;
 
 export enum PoolFetchType {
   All = "all",
